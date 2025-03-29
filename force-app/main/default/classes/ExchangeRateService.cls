@@ -23,28 +23,22 @@ public class ExchangeRateService {
         
         Http http = new Http();
         
-        try {
+
             HttpResponse res = http.send(req);
             if(res.getStatusCode() >= 200 && res.getStatusCode() < 300) {
                 response = res.getBody();
-                //System.debug(response);
-                Map<String, Object> jsonBoby = (Map<String, Object>)JSON.deserializeUntyped(response);
-                //System.debug(jsonBoby);
-                Map<String, Object> jsonConversionRates = (Map<String,Object>)jsonBoby.get('conversion_rates');
-                System.debug(jsonConversionRates);
-                System.debug(jsonConversionRates.get('AUD'));
-                System.debug(jsonConversionRates.get('ALL'));
-                System.debug(jsonConversionRates.get('ANG'));
-                System.debug(jsonConversionRates.get('ARS'));
+                ExchangeRateWrapper exchangeRateWrapperData = ExchangeRateWrapper.parse(response);
+                
+                System.debug(exchangeRateWrapperData);
+                return exchangeRateWrapperData; // Replace with actual implementation
             }
             else{
+                // TODO: Create an custom exception class
                 response = 'Status Code: ' + res.getStatusCode() + 'Status: '+ res.getStatus();         
-            }
-        } catch (Exception ex) {
-            response = 'There was an errror' + ex.getMessage();
         }
-        return null; // Replace with actual implementation
+        return null; 
     }
+    
     
     /**
      * @description Processes the exchange rate data and creates or updates records
