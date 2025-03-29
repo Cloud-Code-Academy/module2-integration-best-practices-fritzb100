@@ -18,7 +18,7 @@ public class ExchangeRateWrapper {
     // }
     
     // Add properties for base currency
-    public String base_code;
+    public String base_code = 'USD';
     
     // Add property for time last updated
     public String time_last_update_unix;
@@ -29,21 +29,29 @@ public class ExchangeRateWrapper {
     // Add property for external ID
     // This is an ID you will generate to uniquely identify the exchange rate record
     // This does not come from the API response
-    public String externalId; //baseCurrency + '_' + targetCurrency
-    
+    public String externalId = base_code + '_' + conversion_rates.keySet();
+
     /**
      * @description Converts the wrapper data to a list of Exchange_Rate__c records
      * @return List<Exchange_Rate__c> The list of exchange rate records
      */
-    //public List<Exchange_Rate__c> toExchangeRates() {
+    public List<Exchange_Rate__c> toExchangeRates() {
         // TODO: Implement the method to convert the wrapper data to Exchange_Rate__c records
         // 1. Create a list to hold the Exchange_Rate__c records
+        List<Exchange_Rate__c> exchangeRateList = new List<Exchange_Rate__c>();
         // 2. Iterate through the rates map
         // 3. For each rate, create an Exchange_Rate__c record
+        for(String currencyCode : conversion_rates.keyset()) {
+            Exchange_Rate__c newExchangeRate = new Exchange_Rate__c(
+                Rate__c = conversion_rates.get(currencyCode)
+            );
+            exchangeRateList.add(newExchangeRate);
+            System.debug('exchangeRateList: ' + exchangeRateList);
+        }
         // 4. Return the list of records
         
-        //return null; // Replace with actual implementation
-    //}
+        return exchangeRateList; // Replace with actual implementation
+    }
     
     /**
      * @description Static method to parse the JSON response into the wrapper class
@@ -54,7 +62,8 @@ public class ExchangeRateWrapper {
         // TODO: Implement the method to parse the JSON response
         ExchangeRateWrapper wrapperClass = (ExchangeRateWrapper)JSON.deserialize(jsonResponse, ExchangeRateWrapper.class);
         // Use JSON.deserialize or JSON.deserializeStrict to parse the response
-        
+        //System.debug('externalId: ' +externalId);
+        System.debug('wrapperClass: ' +wrapperClass);
         return wrapperClass; // Replace with actual implementation
     }
 }

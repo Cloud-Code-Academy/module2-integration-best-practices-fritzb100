@@ -18,7 +18,7 @@ public class ExchangeRateService {
         // TODO: Implement the method to make a callout to the Exchange Rate API
         String response;
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('callout:'+ NAMED_CREDENTIAL + '/'+ BASE_CURRENCY); //'https://v6.exchangerate-api.com/v6/e19eb0b644e17cbff7e654e2/latest/USD'
+        req.setEndpoint('callout:'+ NAMED_CREDENTIAL + '/'+ BASE_CURRENCY); //
         req.setMethod('GET');
         
         Http http = new Http();
@@ -38,7 +38,7 @@ public class ExchangeRateService {
         }
         return null; 
     }
-    
+
     
     /**
      * @description Processes the exchange rate data and creates or updates records
@@ -47,7 +47,9 @@ public class ExchangeRateService {
      */
     public static List<Exchange_Rate__c> processRates(ExchangeRateWrapper rateData) {
         // TODO: Implement the method to process rates and create/update records
-        
+        // get the list from the exchangeRateWrapper
+        //upsert it with external Id
+        //return it
         return null; // Replace with actual implementation
     }
     
