@@ -42,10 +42,17 @@ public class ExchangeRateWrapper {
         // 2. Iterate through the rates map
         // 3. For each rate, create an Exchange_Rate__c record
         for(String currencyCode : conversion_rates.keyset()) {
-            Exchange_Rate__c newExchangeRate = new Exchange_Rate__c(
-                Rate__c = conversion_rates.get(currencyCode),
-                External_Id__c = base_code + '_' + currencyCode 
-            );
+            Long unixTimeMilliseconds = Long.valueOf(time_last_update_unix) * 1000; // Convert to milliseconds
+            DateTime dateTimeConversion = Datetime.newInstance(unixTimeMilliseconds);
+
+            Exchange_Rate__c newExchangeRate = new Exchange_Rate__c();
+                newExchangeRate.Rate__c = conversion_rates.get(currencyCode);
+                newExchangeRate.External_Id__c = base_code + '_' + currencyCode;
+                newExchangeRate.Base_Currency__c = String.valueOf(conversion_rates.get(base_code));
+                newExchangeRate.Last_Updated__c = dateTimeConversion;
+                newExchangeRate.Target_Currency__c = currencyCode;
+       
+            System.debug('newExchangeRate: ' + newExchangeRate);
             exchangeRateList.add(newExchangeRate);           
         }
         // 4. Return the list of records
@@ -61,8 +68,7 @@ public class ExchangeRateWrapper {
         // TODO: Implement the method to parse the JSON response
         ExchangeRateWrapper wrapperClass = (ExchangeRateWrapper)JSON.deserialize(jsonResponse, ExchangeRateWrapper.class);
         // Use JSON.deserialize or JSON.deserializeStrict to parse the response
-        //System.debug('externalId: ' +externalId);
-        //System.debug('wrapperClass: ' +wrapperClass);
+        System.debug('wrapperClass: ' +wrapperClass);
         return wrapperClass; // Replace with actual implementation
     }
 }

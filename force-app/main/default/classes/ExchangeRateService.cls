@@ -56,7 +56,17 @@ public class ExchangeRateService {
         // TODO: Implement the method to process rates and create/update records
         // get the list from the exchangeRateWrapper
         //upsert it with external Id
-           // Database.upsert(rateData, 'External_Id__c'); // Replace with the correct external ID field
+        for(Exchange_Rate__c exchangeRateRecord : rateData){
+            exchangeRateRecord.External_Id__c   = (String)exchangeRateRecord.External_Id__c;
+            exchangeRateRecord.Base_Currency__c = (String)exchangeRateRecord.Base_Currency__c;
+            exchangeRateRecord.Last_Updated__c  = (Datetime)exchangeRateRecord.Last_Updated__c;
+            exchangeRateRecord.Target_Currency__c = (String)exchangeRateRecord.Target_Currency__c; 
+        }
+        if (Schema.sObjectType.Exchange_Rate__c.isCreateable() && Schema.sObjectType.Exchange_Rate__c.isUpdateable()) {
+            Database.upsert(rateData, Exchange_Rate__c.External_Id__c); // Replace with the correct external ID field
+        } else {
+            throw new CustomException('Insufficient permissions to create or update Exchange_Rate__c records.');
+        }
         //return it
         return rateData; // Replace with actual implementation
     }
