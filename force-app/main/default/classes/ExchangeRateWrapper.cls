@@ -35,15 +35,15 @@ public class ExchangeRateWrapper {
      * @description Converts the wrapper data to a list of Exchange_Rate__c records
      * @return List<Exchange_Rate__c> The list of exchange rate records
      */
-    public List<Exchange_Rate__c> toExchangeRates() {
+    //public List<Exchange_Rate__c> toExchangeRates() {
         // TODO: Implement the method to convert the wrapper data to Exchange_Rate__c records
         // 1. Create a list to hold the Exchange_Rate__c records
         // 2. Iterate through the rates map
         // 3. For each rate, create an Exchange_Rate__c record
         // 4. Return the list of records
         
-        return null; // Replace with actual implementation
-    }
+        //return null; // Replace with actual implementation
+    //}
     
     /**
      * @description Static method to parse the JSON response into the wrapper class

@@ -16,7 +16,33 @@ public class ExchangeRateService {
      */
     public static ExchangeRateWrapper getLatestRates() {
         // TODO: Implement the method to make a callout to the Exchange Rate API
+        String response;
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint('callout:'+ NAMED_CREDENTIAL + '/'+ BASE_CURRENCY); //'https://v6.exchangerate-api.com/v6/e19eb0b644e17cbff7e654e2/latest/USD'
+        req.setMethod('GET');
         
+        Http http = new Http();
+        
+        try {
+            HttpResponse res = http.send(req);
+            if(res.getStatusCode() >= 200 && res.getStatusCode() < 300) {
+                response = res.getBody();
+                //System.debug(response);
+                Map<String, Object> jsonBoby = (Map<String, Object>)JSON.deserializeUntyped(response);
+                //System.debug(jsonBoby);
+                Map<String, Object> jsonConversionRates = (Map<String,Object>)jsonBoby.get('conversion_rates');
+                System.debug(jsonConversionRates);
+                System.debug(jsonConversionRates.get('AUD'));
+                System.debug(jsonConversionRates.get('ALL'));
+                System.debug(jsonConversionRates.get('ANG'));
+                System.debug(jsonConversionRates.get('ARS'));
+            }
+            else{
+                response = 'Status Code: ' + res.getStatusCode() + 'Status: '+ res.getStatus();         
+            }
+        } catch (Exception ex) {
+            response = 'There was an errror' + ex.getMessage();
+        }
         return null; // Replace with actual implementation
     }
     
