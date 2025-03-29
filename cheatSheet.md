@@ -17,5 +17,5 @@
 2. sf org display --verbose --json > auth.json
 3. copy the auth url
 4. go to github actions
-5. under seccrets create a new secret called DEV_HUB_AUTH_URL
+5. under seccrets create a new Repository secret called DEV_HUB_AUTH_URL
 6. paste the auth url in the secret value

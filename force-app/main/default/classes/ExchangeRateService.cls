@@ -27,9 +27,14 @@ public class ExchangeRateService {
             HttpResponse res = http.send(req);
             if(res.getStatusCode() >= 200 && res.getStatusCode() < 300) {
                 response = res.getBody();
+                // Parse the JSON response into the wrapper class
                 ExchangeRateWrapper exchangeRateWrapperData = ExchangeRateWrapper.parse(response);
                 
-                System.debug(exchangeRateWrapperData);
+                // Call the toExchangeRates() method to get the list of Exchange_Rate__c records
+                List<Exchange_Rate__c> exchangeRateRecords = exchangeRateWrapperData.toExchangeRates();
+                List<Exchange_Rate__c> processRateRecords  = processRates(exchangeRateRecords);
+                
+                System.debug('processRateRecords: ' + processRateRecords);
                 return exchangeRateWrapperData; // Replace with actual implementation
             }
             else{
@@ -45,12 +50,15 @@ public class ExchangeRateService {
      * @param rateData The wrapper containing exchange rate data
      * @return List<Exchange_Rate__c> The list of records created or updated
      */
-    public static List<Exchange_Rate__c> processRates(ExchangeRateWrapper rateData) {
+    public static List<Exchange_Rate__c> processRates(List<Exchange_Rate__c> rateData) {
+        //List<Exchange_Rate__c> listToReturn = new List<Exchange_Rate__c>();
+        System.debug(rateData);
         // TODO: Implement the method to process rates and create/update records
         // get the list from the exchangeRateWrapper
         //upsert it with external Id
+           // Database.upsert(rateData, 'External_Id__c'); // Replace with the correct external ID field
         //return it
-        return null; // Replace with actual implementation
+        return rateData; // Replace with actual implementation
     }
     
     /**

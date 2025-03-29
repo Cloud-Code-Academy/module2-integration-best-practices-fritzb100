@@ -25,11 +25,11 @@ public class ExchangeRateWrapper {
     
     // Add property for rates (using a map)
     public Map<String, Decimal> conversion_rates;
-
+    
     // Add property for external ID
     // This is an ID you will generate to uniquely identify the exchange rate record
     // This does not come from the API response
-    public String externalId = base_code + '_' + conversion_rates.keySet();
+    public String externalId;
 
     /**
      * @description Converts the wrapper data to a list of Exchange_Rate__c records
@@ -43,13 +43,12 @@ public class ExchangeRateWrapper {
         // 3. For each rate, create an Exchange_Rate__c record
         for(String currencyCode : conversion_rates.keyset()) {
             Exchange_Rate__c newExchangeRate = new Exchange_Rate__c(
-                Rate__c = conversion_rates.get(currencyCode)
+                Rate__c = conversion_rates.get(currencyCode),
+                External_Id__c = base_code + '_' + currencyCode 
             );
-            exchangeRateList.add(newExchangeRate);
-            System.debug('exchangeRateList: ' + exchangeRateList);
+            exchangeRateList.add(newExchangeRate);           
         }
         // 4. Return the list of records
-        
         return exchangeRateList; // Replace with actual implementation
     }
     
@@ -63,7 +62,7 @@ public class ExchangeRateWrapper {
         ExchangeRateWrapper wrapperClass = (ExchangeRateWrapper)JSON.deserialize(jsonResponse, ExchangeRateWrapper.class);
         // Use JSON.deserialize or JSON.deserializeStrict to parse the response
         //System.debug('externalId: ' +externalId);
-        System.debug('wrapperClass: ' +wrapperClass);
+        //System.debug('wrapperClass: ' +wrapperClass);
         return wrapperClass; // Replace with actual implementation
     }
 }
