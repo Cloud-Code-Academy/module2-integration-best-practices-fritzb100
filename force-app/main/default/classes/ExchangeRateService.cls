@@ -3,7 +3,9 @@
  * Students will implement the methods to make callouts and process responses
  */
 public class ExchangeRateService {
-    public class LogException extends Exception {}
+    // static Strings to use for exception messages
+    private static String UNRESOLVED_NAME = 'Exception in ExchangeRateService';
+    private static String OBJECT_NAME = 'Exchange_Rate__c';
     
     // The named credential to use for the callout
     private static final String NAMED_CREDENTIAL = 'ExchangeRate_API';
@@ -19,13 +21,12 @@ public class ExchangeRateService {
         // TODO: Implement the method to make a callout to the Exchange Rate API
         String response;
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('callout:'+ NAMED_CREDENTIAL + '/'+ BASE_CURRENCY); //
+        req.setEndpoint('callout:'+ NAMED_CREDENTIAL + '/'+ BASE_CURRENCY);
         req.setMethod('GET');
         
         Http http = new Http();
-        
-
-            HttpResponse res = http.send(req);
+        HttpResponse res = http.send(req);
+        try {
             if(res.getStatusCode() >= 200 && res.getStatusCode() < 300) {
                 response = res.getBody();
                 // Parse the JSON response into the wrapper class
@@ -38,9 +39,8 @@ public class ExchangeRateService {
                 System.debug('processRateRecords: ' + processRateRecords);
                 return exchangeRateWrapperData; // Replace with actual implementation
             }
-            else{
-                // TODO: Create an custom exception class
-                response = 'Status Code: ' + res.getStatusCode() + 'Status: '+ res.getStatus();         
+        } catch (Exception e) {
+            createItem(e, 'getLatestRates');
         }
         return null; 
     }
@@ -52,15 +52,12 @@ public class ExchangeRateService {
      * @return List<Exchange_Rate__c> The list of records created or updated
      */
     public static List<Exchange_Rate__c> processRates(List<Exchange_Rate__c> rateData) {
-        //List<Exchange_Rate__c> listToReturn = new List<Exchange_Rate__c>();
-        System.debug(rateData);
-        // TODO: Implement the method to process rates and create/update records
         // get the list from the exchangeRateWrapper
         //upsert it with external Id
         for(Exchange_Rate__c exchangeRateRecord : rateData){
-            exchangeRateRecord.External_Id__c   = (String)exchangeRateRecord.External_Id__c;
-            exchangeRateRecord.Base_Currency__c = (String)exchangeRateRecord.Base_Currency__c;
-            exchangeRateRecord.Last_Updated__c  = (Datetime)exchangeRateRecord.Last_Updated__c;
+            exchangeRateRecord.External_Id__c     = (String)exchangeRateRecord.External_Id__c;
+            exchangeRateRecord.Base_Currency__c   = (String)exchangeRateRecord.Base_Currency__c;
+            exchangeRateRecord.Last_Updated__c    = (Datetime)exchangeRateRecord.Last_Updated__c;
             exchangeRateRecord.Target_Currency__c = (String)exchangeRateRecord.Target_Currency__c; 
         }
         try {
@@ -68,17 +65,8 @@ public class ExchangeRateService {
                 Database.upsert(rateData, Exchange_Rate__c.External_Id__c); // Replace with the correct external ID field
             } 
         } catch (Exception e) {
-            Module2Utility.debugException(e);
-            Unresolved_Item__c item = Module2Utility.createUnresolvedItem(
-            'Exception in ExchangeRateService',
-            'Exchange_Rate__c',
-            'processRates',
-            e.getMessage() + ' ' + e.getCause() + ' ' + e.getStackTraceString(), 
-            UserInfo.getUserId()
-            );
-            insert item;
+            createItem(e, 'processRates');
         }
-        
         //return it
         return rateData; // Replace with actual implementation
     }
@@ -88,11 +76,26 @@ public class ExchangeRateService {
      * @return List<Exchange_Rate__c> The list of records created or updated
      */
     public static List<Exchange_Rate__c> updateExchangeRates() {
-        // TODO: Implement the method to get and process rates
-        // 1. Call getLatestRates to retrieve the data
-        // 2. Call processRates to create/update records
-        // 3. Return the processed records
-        
-        return null; // Replace with actual implementation
+        try {
+                //1. Call getLatestRates to retrieve the data
+            ExchangeRateWrapper exchangeRateWrapper = getLatestRates();
+            List<Exchange_Rate__c> exchangeRateRecords = exchangeRateWrapper.toExchangeRates();
+                // 2. Call processRates to create/update records
+            List<Exchange_Rate__c> processedRecords = processRates(exchangeRateRecords);
+                // 3. Return the processed records
+            return processedRecords; // Replace with actual implementation
+        } catch (Exception e) {
+            createItem(e, 'updateExchangeRates');
+        }
+        return null; 
+    }
+
+    // Method to catch exceptions and create an unresolved item to troubleshoot
+    public static void createItem(Exception e, String method) {
+        Module2Utility.debugException(e);
+        Unresolved_Item__c item = Module2Utility.createUnresolvedItem(
+        UNRESOLVED_NAME, OBJECT_NAME, method, e.getMessage() + ' ' + e.getCause() + ' ' + e.getStackTraceString(), UserInfo.getUserId()
+        );
+        insert item;
     }
 }

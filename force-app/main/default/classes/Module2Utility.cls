@@ -1,6 +1,6 @@
 public with sharing class Module2Utility {
 
-    public static Unresolved_Item__c createUnresolvedItem(String itemName, String Obj, String method, String Description, Id ownerId) {
+    public static Unresolved_Item__c createUnresolvedItem(String itemName, String obj, String method, String description, Id ownerId) {
         description = description.length() > 131072 ? description.substring(0, 131072) : description;
         Unresolved_Item__c item = new Unresolved_Item__c(
             Name = itemName,
@@ -12,11 +12,11 @@ public with sharing class Module2Utility {
         return item;
     }
     public static void debugException(Exception e) {
-        System.debug('*** Execption occured!!***');
-        System.debug('Execption Type caught: ' + e.getTypeName());
-        System.debug('Message: ' + e.getMessage());
-        System.debug('Cause: ' + e.getCause());
-        System.debug('Line Number: ' + e.getLineNumber());
-        System.debug('Stack trace: ' + e.getStackTraceString());
+        System.debug(LoggingLevel.ERROR, '*** Exception occured!!***');
+        System.debug(LoggingLevel.ERROR,'Exception Type caught: ' + e.getTypeName());
+        System.debug(LoggingLevel.ERROR,'Message: ' + e.getMessage());
+        System.debug(LoggingLevel.ERROR,'Cause: ' + e.getCause());
+        System.debug(LoggingLevel.ERROR,'Line Number: ' + e.getLineNumber());
+        System.debug(LoggingLevel.ERROR,'Stack trace: ' + e.getStackTraceString());
     }
 }
