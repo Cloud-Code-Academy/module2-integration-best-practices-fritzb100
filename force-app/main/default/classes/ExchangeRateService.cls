@@ -35,9 +35,7 @@ public class ExchangeRateService {
                 // Call the toExchangeRates() method to get the list of Exchange_Rate__c records
                 List<Exchange_Rate__c> exchangeRateRecords = exchangeRateWrapperData.toExchangeRates();
                 List<Exchange_Rate__c> processRateRecords  = processRates(exchangeRateRecords);
-                
-                System.debug('processRateRecords: ' + processRateRecords);
-                return exchangeRateWrapperData; // Replace with actual implementation
+            return exchangeRateWrapperData; // Replace with actual implementation
             }
         } catch (Exception e) {
             createItem(e, 'getLatestRates');
