@@ -8,7 +8,7 @@ global class ExchangeRateScheduler implements Schedulable {
      * @description Executes the scheduled job to update exchange rates
      * @param context The SchedulableContext
      */
-    global void execute (SchedulableContext SC) {
+    global void execute (SchedulableContext sc) {
         // 1. Call ExchangeRateService.updateExchangeRates()
         // 2. Add error handling
         // 3. Consider adding logging if available
@@ -28,7 +28,7 @@ global class ExchangeRateScheduler implements Schedulable {
     }
 
     // run in apex anonymous
-    // ExchangeRateScheduler.sheduleDailyJob();
+    //ExchangeRateScheduler.sheduleDailyJob();
 
     //TODO if there is a job scheduled, don't schedule another check CronTrigger
 }

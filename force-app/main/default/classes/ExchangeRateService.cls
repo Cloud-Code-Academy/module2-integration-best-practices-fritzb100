@@ -4,8 +4,8 @@
  */
 public class ExchangeRateService {
     // static Strings to use for exception messages
-    private static String UNRESOLVED_NAME = 'Exception in ExchangeRateService';
-    private static String OBJECT_NAME = 'Exchange_Rate__c';
+    private static final String UNRESOLVED_NAME = 'Exception in ExchangeRateService';
+    private static final String OBJECT_NAME = 'Exchange_Rate__c';
     
     // The named credential to use for the callout
     private static final String NAMED_CREDENTIAL = 'ExchangeRate_API';
