@@ -45,4 +45,4 @@ $RECYCLE.BIN/
 **/venv/
 /.cursor
 /force-app/main/solutions
-/.auth.json
+/authFile.json
