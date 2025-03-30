@@ -4,7 +4,10 @@ public with sharing class ExchangeRateQueuable implements Queueable, Database.Al
 
     // queue the job
     public static void enqueueJob() {
-        System.enqueueJob(new ExchangeRateQueuable());
+        if(!isQueueableJobRunning()) {
+        System.enqueueJob(new ExchangeRateQueuable());   
+        }
+
     }
     // execute method to process
     public void execute(QueueableContext context) {
@@ -15,12 +18,22 @@ public with sharing class ExchangeRateQueuable implements Queueable, Database.Al
             ExchangeRateService.createItem(e, 'ExchangeRateQueueable Class');
         }
 
-        // requeue the job
+        // requeue the job 
         Boolean reachMaxDepth = AsyncInfo.getCurrentQueueableStackDepth() == MAX_JOBS;
-        if(!reachMaxDepth) {
+        if(!reachMaxDepth && !isQueueableJobRunning() ) {                           
             ExchangeRateQueuable.enqueueJob();
-        }
+        }   
     }
 
-    // check is a schedule job
+    // check is a Queueable job already exist
+    public static Boolean isQueueableJobRunning() {
+        List<AsyncApexJob> queuablejobs = [
+            SELECT Id, Status, JobType
+            FROM AsyncApexJob
+            WHERE JobType = 'Queueable'
+            AND ApexClass.Name = 'ExchangeRateQueuable'
+            AND Status IN ('Processing,', 'Queued')
+        ];
+        return !queuablejobs.isEmpty();
+    }
 }

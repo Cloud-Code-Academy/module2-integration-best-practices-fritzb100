@@ -21,9 +21,9 @@ private class ExchangeRateServiceTest {
         
         // Verify the result
         Assert.areNotEqual(null, wrapper, 'Wrapper should not be null');
-        // Assert.areEqual('USD', wrapper.base_code, 'Base currency should be USD');
-        // Assert.areEqual(9, wrapper.conversion_rates.size(), 'Should have 9 rates');
-        // Assert.areEqual(0.9488, wrapper.conversion_rates.get('EUR'), 'EUR rate should match');
+        Assert.areEqual('USD', wrapper.base_code, 'Base currency should be USD');
+        Assert.areEqual(9, wrapper.conversion_rates.size(), 'Should have 9 rates');
+        Assert.areEqual(0.9488, wrapper.conversion_rates.get('EUR'), 'EUR rate should match');
     }
     
     /**
@@ -52,19 +52,20 @@ private class ExchangeRateServiceTest {
     static void testProcessRates() {
         // Create a wrapper manually
         ExchangeRateWrapper wrapper = new ExchangeRateWrapper();
-        // wrapper.base_code = 'USD';
-        // wrapper.time_last_update_unix = '1740690001';
+        wrapper.base_code = 'USD';
+        wrapper.time_last_update_unix = '1740690001';
         
-        // // Add rates
-        // wrapper.conversion_rates = new Map<String, Decimal>{
-        //     'EUR' => 0.9488,
-        //     'GBP' => 0.8393,
-        //     'JPY' => 136.57
-        // };
+        // Add rates
+        wrapper.conversion_rates = new Map<String, Decimal>{
+            'EUR' => 0.9488,
+            'GBP' => 0.8393,
+            'JPY' => 136.57
+        };
         
         // Process the rates
         Test.startTest();
-        List<Exchange_Rate__c> rates = ExchangeRateService.processRates(wrapper);
+        List<Exchange_Rate__c> exchangeRateRecords = wrapper.toExchangeRates();
+        List<Exchange_Rate__c> rates = ExchangeRateService.processRates(exchangeRateRecords);
         Test.stopTest();
         
         // Verify the results

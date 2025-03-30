@@ -48,7 +48,7 @@ public class ExchangeRateWrapper {
             Exchange_Rate__c newExchangeRate = new Exchange_Rate__c();
                 newExchangeRate.Rate__c = conversion_rates.get(currencyCode);
                 newExchangeRate.External_Id__c = base_code + '_' + currencyCode;
-                newExchangeRate.Base_Currency__c = String.valueOf(conversion_rates.get(base_code));
+                newExchangeRate.Base_Currency__c = base_code;
                 newExchangeRate.Last_Updated__c = dateTimeConversion;
                 newExchangeRate.Target_Currency__c = currencyCode;      
             exchangeRateList.add(newExchangeRate);           
@@ -62,8 +62,7 @@ public class ExchangeRateWrapper {
      * @param jsonResponse The JSON response from the API
      * @return exchangeRateWrapperResponse The parsed wrapper instance
      */
-    public static ExchangeRateWrapper parse(String jsonResponse) {
-        // TODO: Implement the method to parse the JSON response         
+    public static ExchangeRateWrapper parse(String jsonResponse) {      
         // Use JSON.deserialize or JSON.deserializeStrict to parse the response
         ExchangeRateWrapper exchangeRateWrapperResponse = (ExchangeRateWrapper)JSON.deserialize(jsonResponse, ExchangeRateWrapper.class);
         return exchangeRateWrapperResponse; // Replace with actual implementation

@@ -18,15 +18,16 @@ private class ExchangeRateSchedulerTest {
         
         // Call the execute method directly
         Test.startTest();
-        //scheduler.execute(null); // Passing null as the context is sufficient for testing
+        scheduler.execute(null); // Passing null as the context is sufficient for testing
         Test.stopTest();
-        
+
         // Verify that exchange rates were created
-        //List<Exchange_Rate__c> rates = [
-            //SELECT Id, Base_Currency__c, Target_Currency__c, Rate__c
-            //FROM Exchange_Rate__c
-        //];
-        //System.assertEquals(9, rates.size(), 'Should have 9 exchange rate records');
+        List<Exchange_Rate__c> rates = [
+            SELECT Id, Base_Currency__c, Target_Currency__c, Rate__c
+            FROM Exchange_Rate__c
+        ];
+        
+        System.assertEquals(9, rates.size(), 'Should have 9 exchange rate records');
     }
     
     /**
@@ -42,18 +43,18 @@ private class ExchangeRateSchedulerTest {
         
         // Call the execute method and ensure it handles errors gracefully
         Test.startTest();
-        // try {
-        //     scheduler.execute(null);
-        //     // The execute method should catch exceptions, so we should not assert failure here
-        // } catch (Exception e) {
-        //     System.assert(false, 'The execute method should handle exceptions: ' + e.getMessage());
-        // }
-        // Test.stopTest();
+        try {
+            scheduler.execute(null);
+            // The execute method should catch exceptions, so we should not assert failure here
+        } catch (Exception e) {
+            System.assert(false, 'The execute method should handle exceptions: ' + e.getMessage());
+        }
+        Test.stopTest();
         
-        // // Verify that no exchange rates were created (due to the error)
-        // List<Exchange_Rate__c> rates = [
-        //     SELECT Id FROM Exchange_Rate__c
-        // ];
-        // System.assertEquals(0, rates.size(), 'Should have no exchange rate records due to error');
+        // Verify that no exchange rates were created (due to the error)
+        List<Exchange_Rate__c> rates = [
+            SELECT Id FROM Exchange_Rate__c
+        ];
+        System.assertEquals(0, rates.size(), 'Should have no exchange rate records due to error');
     }
 }
