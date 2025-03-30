@@ -4,8 +4,13 @@
     "**/bower_components": true,
     "**/.sfdx": true
   },
-  "salesforcedx-vscode-core.show-cli-success-msg": false,
+  "salesforcedx-vscode-core.show-cli-success-msg": true,
   "salesforce.einsteinForDevelopers.enable": false,
-  "salesforce.einsteinForDevelopers.enableAutocompletions": false
+  "salesforce.einsteinForDevelopers.enableAutocompletions": false,
+  "workbench.colorCustomizations": {
+    "statusBar.background": null,
+    "activityBar.background": null
+  },
+  "editor.suggest.showStatusBar": true
 }
 

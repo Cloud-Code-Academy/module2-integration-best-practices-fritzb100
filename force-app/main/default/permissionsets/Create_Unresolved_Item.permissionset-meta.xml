@@ -2,11 +2,6 @@
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <fieldPermissions>
         <editable>true</editable>
-        <field>Exchange_Rate__c.External_Id__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Unresolved_Item__c.Description__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -26,19 +21,19 @@
         <readable>true</readable>
     </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
-    <label>ExchangeRate</label>
+    <label>Create Unresolved Item</label>
     <objectPermissions>
         <allowCreate>true</allowCreate>
-        <allowDelete>true</allowDelete>
+        <allowDelete>false</allowDelete>
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
-        <modifyAllRecords>true</modifyAllRecords>
-        <object>Exchange_Rate__c</object>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Unresolved_Item__c</object>
         <viewAllFields>true</viewAllFields>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <tabSettings>
-        <tab>Exchange_Rate__c</tab>
+        <tab>Unresolved_Item__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
 </PermissionSet>

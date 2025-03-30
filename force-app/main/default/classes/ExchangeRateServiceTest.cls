@@ -64,7 +64,8 @@ private class ExchangeRateServiceTest {
         
         // Process the rates
         Test.startTest();
-        List<Exchange_Rate__c> rates = ExchangeRateService.processRates(wrapper);
+        List<Exchange_Rate__c> exchangeRateRecords = wrapper.toExchangeRates();
+        List<Exchange_Rate__c> rates = ExchangeRateService.processRates(exchangeRateRecords);
         Test.stopTest();
         
         // Verify the results

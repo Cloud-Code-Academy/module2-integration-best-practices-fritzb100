@@ -20,12 +20,13 @@ private class ExchangeRateSchedulerTest {
         Test.startTest();
         scheduler.execute(null); // Passing null as the context is sufficient for testing
         Test.stopTest();
-        
+
         // Verify that exchange rates were created
         List<Exchange_Rate__c> rates = [
             SELECT Id, Base_Currency__c, Target_Currency__c, Rate__c
             FROM Exchange_Rate__c
         ];
+        
         System.assertEquals(9, rates.size(), 'Should have 9 exchange rate records');
     }
     

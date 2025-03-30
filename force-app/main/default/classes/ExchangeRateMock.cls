@@ -36,6 +36,7 @@ public class ExchangeRateMock implements HttpCalloutMock {
         if (simulateError) {
             response.setStatusCode(500);
             response.setBody('{"error": "Internal Server Error"}');
+            throw new CalloutException('Error: Mocked callout failed');
         } else {
             response.setStatusCode(200);
             response.setBody(getSuccessfulResponse());
@@ -51,20 +52,20 @@ public class ExchangeRateMock implements HttpCalloutMock {
      */
     private String getSuccessfulResponse() {
         return '{' +
-               '"base_code": "USD",' +
-               '"time_last_update_unix": 1740690001,' +
-               '"conversion_rates": {' +
-               '  "EUR": 0.9488,' +
-               '  "GBP": 0.8393,' +
-               '  "JPY": 136.57,' +
-               '  "CAD": 1.3594,' +
-               '  "AUD": 1.4915,' +
-               '  "CNY": 6.9571,' +
-               '  "INR": 82.7275,' +
-               '  "BRL": 5.2094,' +
-               '  "MXN": 18.2985' +
-               '}' +
-               '}';
+                '"base_code": "USD",' +
+                '"time_last_update_unix": 1740690001,' +
+                '"conversion_rates": {' +
+                '  "EUR": 0.9488,' +
+                '  "GBP": 0.8393,' +
+                '  "JPY": 136.57,' +
+                '  "CAD": 1.3594,' +
+                '  "AUD": 1.4915,' +
+                '  "CNY": 6.9571,' +
+                '  "INR": 82.7275,' +
+                '  "BRL": 5.2094,' +
+                '  "MXN": 18.2985' +
+                '}' +
+                '}';
     }
     
     /**
