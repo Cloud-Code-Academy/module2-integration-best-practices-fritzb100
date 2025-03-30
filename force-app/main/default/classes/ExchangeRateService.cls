@@ -3,6 +3,7 @@
  * Students will implement the methods to make callouts and process responses
  */
 public class ExchangeRateService {
+    public class LogException extends Exception {}
     
     // The named credential to use for the callout
     private static final String NAMED_CREDENTIAL = 'ExchangeRate_API';
@@ -62,11 +63,22 @@ public class ExchangeRateService {
             exchangeRateRecord.Last_Updated__c  = (Datetime)exchangeRateRecord.Last_Updated__c;
             exchangeRateRecord.Target_Currency__c = (String)exchangeRateRecord.Target_Currency__c; 
         }
-        if (Schema.sObjectType.Exchange_Rate__c.isCreateable() && Schema.sObjectType.Exchange_Rate__c.isUpdateable()) {
-            Database.upsert(rateData, Exchange_Rate__c.External_Id__c); // Replace with the correct external ID field
-        } else {
-            throw new CustomException('Insufficient permissions to create or update Exchange_Rate__c records.');
+        try {
+            if (Schema.sObjectType.Exchange_Rate__c.isCreateable() && Schema.sObjectType.Exchange_Rate__c.isUpdateable()) {
+                Database.upsert(rateData, Exchange_Rate__c.External_Id__c); // Replace with the correct external ID field
+            } 
+        } catch (Exception e) {
+            Module2Utility.debugException(e);
+            Unresolved_Item__c item = Module2Utility.createUnresolvedItem(
+            'Exception in ExchangeRateService',
+            'Exchange_Rate__c',
+            'processRates',
+            e.getMessage() + ' ' + e.getCause() + ' ' + e.getStackTraceString(), 
+            UserInfo.getUserId()
+            );
+            insert item;
         }
+        
         //return it
         return rateData; // Replace with actual implementation
     }

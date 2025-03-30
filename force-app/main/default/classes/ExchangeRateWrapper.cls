@@ -34,25 +34,23 @@ public class ExchangeRateWrapper {
     /**
      * @description Converts the wrapper data to a list of Exchange_Rate__c records
      * @return List<Exchange_Rate__c> The list of exchange rate records
-     */
+    */
+    
     public List<Exchange_Rate__c> toExchangeRates() {
         // TODO: Implement the method to convert the wrapper data to Exchange_Rate__c records
         // 1. Create a list to hold the Exchange_Rate__c records
         List<Exchange_Rate__c> exchangeRateList = new List<Exchange_Rate__c>();
+        Long unixTimeMilliseconds = Long.valueOf(time_last_update_unix) * 1000; // Convert to milliseconds
+        DateTime dateTimeConversion = Datetime.newInstance(unixTimeMilliseconds); // convert to DateTime
         // 2. Iterate through the rates map
         // 3. For each rate, create an Exchange_Rate__c record
         for(String currencyCode : conversion_rates.keyset()) {
-            Long unixTimeMilliseconds = Long.valueOf(time_last_update_unix) * 1000; // Convert to milliseconds
-            DateTime dateTimeConversion = Datetime.newInstance(unixTimeMilliseconds);
-
             Exchange_Rate__c newExchangeRate = new Exchange_Rate__c();
                 newExchangeRate.Rate__c = conversion_rates.get(currencyCode);
                 newExchangeRate.External_Id__c = base_code + '_' + currencyCode;
                 newExchangeRate.Base_Currency__c = String.valueOf(conversion_rates.get(base_code));
                 newExchangeRate.Last_Updated__c = dateTimeConversion;
-                newExchangeRate.Target_Currency__c = currencyCode;
-       
-            System.debug('newExchangeRate: ' + newExchangeRate);
+                newExchangeRate.Target_Currency__c = currencyCode;      
             exchangeRateList.add(newExchangeRate);           
         }
         // 4. Return the list of records
@@ -62,13 +60,12 @@ public class ExchangeRateWrapper {
     /**
      * @description Static method to parse the JSON response into the wrapper class
      * @param jsonResponse The JSON response from the API
-     * @return ExchangeRateWrapper The parsed wrapper instance
+     * @return ExchangeRateWrapperResponse The parsed wrapper instance
      */
     public static ExchangeRateWrapper parse(String jsonResponse) {
-        // TODO: Implement the method to parse the JSON response
-        ExchangeRateWrapper wrapperClass = (ExchangeRateWrapper)JSON.deserialize(jsonResponse, ExchangeRateWrapper.class);
+        // TODO: Implement the method to parse the JSON response         
         // Use JSON.deserialize or JSON.deserializeStrict to parse the response
-        System.debug('wrapperClass: ' +wrapperClass);
-        return wrapperClass; // Replace with actual implementation
+        ExchangeRateWrapper ExchangeRateWrapperResponse = (ExchangeRateWrapper)JSON.deserialize(jsonResponse, ExchangeRateWrapper.class);
+        return ExchangeRateWrapperResponse; // Replace with actual implementation
     }
 }
